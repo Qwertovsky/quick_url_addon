@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+  "name": "Quick URL Opener",
+  "version": "0.9",
+
+  "author": "Qwertovsky",
+  "developer": {
+    "name": "Qwertovsky",
+    "url": "https://www.qwertovsky.com"
+  },
+
+  "description": "To quick open standard url where one parameter is changed",
+  "homepage_url": "https://github.com/Qwertovsky/quick_url_addon",
+  "icons": {
+    "48": "icons/icon.png"
+  },
+
+  "permissions": [
+   "activeTab",
+   "storage"
+ ],
+
+ "browser_action": {
+   "default_icon": "icons/icon.png",
+   "default_title": "Quick URL Opener",
+   "default_popup": "index.html"
+ },
+
+ "options_ui": {
+    "page": "options.html"
+  }
+}

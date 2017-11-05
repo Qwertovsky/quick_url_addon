@@ -1,0 +1,26 @@
+.parameter {
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border-bottom: 1px solid #c1c1c1;
+}
+
+.url_row, .name_row {
+    display: flex;
+    flex-direction: row;
+    line-height: 2em;
+}
+
+label {
+    width: 60px;
+    margin-right: 5px;
+    text-align: right;
+}
+
+.url {
+    flex: 1 1 auto;
+}
+
+button.delete {
+    margin-left: 15px;
+}
