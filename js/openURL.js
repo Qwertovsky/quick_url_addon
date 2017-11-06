@@ -1,3 +1,5 @@
+const storage = browser.storage.sync;
+
 function setErrorText(errorText) {
 	var divError=document.getElementById("error");
 	divError.innerText=errorText + "\n";
@@ -71,32 +73,33 @@ function listenInputParameter(inputParameter) {
 };
 
 function onLoad() {
-    const item = window.localStorage.getItem(STORAGE_ITEM);
-    const parameters = JSON.parse(item);
-    const parametersEl = document.getElementById("parameters");
-    if (parameters == undefined || parameters.length == 0) {
-        returnError("Please add URL in Options");
-        return;
-    }
-    for (let i = 0; i < parameters.length; i++) {
-        const parameter = parameters[i];
-        const div = document.createElement("div");
-        
-        const label = document.createElement("label");
-        label.className = "name";
-        label.innerText = parameter[NAME_FIELD];
-        label.title = parameter[NAME_FIELD];
-        
-        const input = document.createElement("input");
-        input.setAttribute("data-url", parameter[URL_FIELD]);
-        input.title = parameter[URL_FIELD];
-        input.className = "url";
-        listenInputParameter(input);
-        
-        div.appendChild(label);
-        div.appendChild(input);
-        parametersEl.appendChild(div);
-    }
+    storage.get(STORAGE_ITEM).then((item) => {
+        const parameters = item[STORAGE_ITEM];
+        const parametersEl = document.getElementById("parameters");
+        if (parameters == undefined || parameters.length == 0) {
+            returnError("Please add URL in Options");
+            return;
+        }
+        for (let i = 0; i < parameters.length; i++) {
+            const parameter = parameters[i];
+            const div = document.createElement("div");
+            
+            const label = document.createElement("label");
+            label.className = "name";
+            label.innerText = parameter[NAME_FIELD];
+            label.title = parameter[NAME_FIELD];
+            
+            const input = document.createElement("input");
+            input.setAttribute("data-url", parameter[URL_FIELD]);
+            input.title = parameter[URL_FIELD];
+            input.className = "url";
+            listenInputParameter(input);
+            
+            div.appendChild(label);
+            div.appendChild(input);
+            parametersEl.appendChild(div);
+        }
+    });
 };
 
 if (window.addEventListener) {

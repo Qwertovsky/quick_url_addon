@@ -28,5 +28,11 @@
 
  "options_ui": {
     "page": "options.html"
-  }
+  },
+  
+ "applications": {
+    "gecko": {
+        "id": "quick-url-opener@qwertovsky.com"
+    }
+ } 
 }

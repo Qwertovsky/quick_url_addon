@@ -3,6 +3,8 @@ const PARAMETER_CLASS = "parameter";
 const NAME_CLASS = "name";
 const URL_CLASS = "url";
 
+const storage = browser.storage.sync;
+
 function saveOptions() {
     const parameterDivs = Array.slice(document.getElementsByClassName(PARAMETER_CLASS));
 
@@ -27,22 +29,29 @@ function saveOptions() {
         parameter[URL_FIELD] = url;
 	    parameters.push( parameter );
 	});
-	window.localStorage.setItem(STORAGE_ITEM, JSON.stringify(parameters));
+	storage.set({parameters}).then(null, (ex) => {error.textContent = ex;} );
 }
 
 function restoreOptions() {
-	const parameters = JSON.parse(window.localStorage.getItem(STORAGE_ITEM));
-    const parametersEl = document.getElementById(PARAMETERS_ID);
-    if (parameters == undefined || parameters.length == 0) {
-        parametersEl.appendChild(createInputs());
-    } else {
-        for(let i=0; i < parameters.length; i++) {
-            const name = parameters[i][NAME_FIELD];
-            const url = parameters[i][URL_FIELD];
-            const div = createInputs(name, url);
-            parametersEl.appendChild(div);
+    console.log(storage);
+	storage.get(STORAGE_ITEM).then(function(item) {
+	    const parameters = item[STORAGE_ITEM];
+        const parametersEl = document.getElementById(PARAMETERS_ID);
+        if (parameters == undefined || parameters.length == 0) {
+            parametersEl.appendChild(createInputs());
+        } else {
+            for(let i=0; i < parameters.length; i++) {
+                const name = parameters[i][NAME_FIELD];
+                const url = parameters[i][URL_FIELD];
+                const div = createInputs(name, url);
+                parametersEl.appendChild(div);
+            }
         }
     }
+    , (ex) => {
+        const errorElm=document.getElementById("error");
+        errorElm.textContent = ex;
+    });
 }
 
 function addUrl() {
