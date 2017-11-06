@@ -1,4 +1,5 @@
-const storage = browser.storage.sync;
+const _browser = this.chrome;
+const storage = _browser.storage.sync;
 
 function setErrorText(errorText) {
 	var divError=document.getElementById("error");
@@ -33,17 +34,11 @@ function removeSkypeFormatting(string) {
 };
 
 function openWindow(url, parameter) {
-    var creating = browser.tabs.create({
-        url: url + parameter
-    });
-    creating.then( ()=>{window.close();} )
-        .catch(returnError);
+    _browser.tabs.create({
+            url: url + parameter
+        }, (tab) => {window.close();}
+    );
 };
-
-
-function onError(item) {
-	returnError("Can't get URL from Options");
-}
 
 function inputParameterListener(e) {
     var enter=13;
@@ -73,7 +68,7 @@ function listenInputParameter(inputParameter) {
 };
 
 function onLoad() {
-    storage.get(STORAGE_ITEM).then((item) => {
+    storage.get(STORAGE_ITEM, (item) => {
         const parameters = item[STORAGE_ITEM];
         const parametersEl = document.getElementById("parameters");
         if (parameters == undefined || parameters.length == 0) {
@@ -83,6 +78,7 @@ function onLoad() {
         for (let i = 0; i < parameters.length; i++) {
             const parameter = parameters[i];
             const div = document.createElement("div");
+            div.className = "parameter";
             
             const label = document.createElement("label");
             label.className = "name";

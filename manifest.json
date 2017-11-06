@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Quick URL Opener",
-  "version": "0.9",
+  "version": "0.9.1",
 
   "author": "Qwertovsky",
   "developer": {
@@ -12,7 +12,8 @@
   "description": "To quick open standard url where one parameter is changed",
   "homepage_url": "https://github.com/Qwertovsky/quick_url_addon",
   "icons": {
-    "48": "icons/icon.png"
+    "256": "icons/icon.png",
+    "128": "icons/icon128.png"
   },
 
   "permissions": [

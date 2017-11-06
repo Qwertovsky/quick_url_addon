@@ -3,10 +3,11 @@ const PARAMETER_CLASS = "parameter";
 const NAME_CLASS = "name";
 const URL_CLASS = "url";
 
-const storage = browser.storage.sync;
+const _browser = this.chrome;
+const storage = _browser.storage.sync;
 
 function saveOptions() {
-    const parameterDivs = Array.slice(document.getElementsByClassName(PARAMETER_CLASS));
+    const parameterDivs = Array.from(document.getElementsByClassName(PARAMETER_CLASS));
 
     var error=document.getElementById("error");
     error.textContent = "";
@@ -29,12 +30,11 @@ function saveOptions() {
         parameter[URL_FIELD] = url;
 	    parameters.push( parameter );
 	});
-	storage.set({parameters}).then(null, (ex) => {error.textContent = ex;} );
+	storage.set({[STORAGE_ITEM] : parameters}, () => {error.textContent = _browser.runtime.lastError;} );
 }
 
 function restoreOptions() {
-    console.log(storage);
-	storage.get(STORAGE_ITEM).then(function(item) {
+	storage.get(STORAGE_ITEM, function(item) {
 	    const parameters = item[STORAGE_ITEM];
         const parametersEl = document.getElementById(PARAMETERS_ID);
         if (parameters == undefined || parameters.length == 0) {
@@ -47,10 +47,6 @@ function restoreOptions() {
                 parametersEl.appendChild(div);
             }
         }
-    }
-    , (ex) => {
-        const errorElm=document.getElementById("error");
-        errorElm.textContent = ex;
     });
 }
 
