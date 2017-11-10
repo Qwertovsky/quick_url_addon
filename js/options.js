@@ -13,15 +13,16 @@ function saveOptions() {
     error.textContent = "";
 
     let parameters = [];
+    let errors = [];
     parameterDivs.forEach( (div) => {
         const name = div.querySelector("input." + NAME_CLASS).value.trim();
         const url = div.querySelector("input." + URL_CLASS).value.trim();
 
         if (!url) {
-            error.textContent = "Please fill URL";
+            errors.push("Please fill URL");
             return;
         } else if (!name) {
-            error.textContent = "Please fill name";
+            errors.push("Please fill name");
             return;
 	    }
 
@@ -30,7 +31,11 @@ function saveOptions() {
         parameter[URL_FIELD] = url;
 	    parameters.push( parameter );
 	});
-	storage.set({[STORAGE_ITEM] : parameters}, () => {error.textContent = _browser.runtime.lastError;} );
+	if (parameters.length == 0 && parameterDivs.length > 0) {
+	    error.textContent = errors;
+	} else {
+	    storage.set({[STORAGE_ITEM] : parameters}, () => {error.textContent = _browser.runtime.lastError;} );
+	}
 }
 
 function restoreOptions() {
@@ -57,25 +62,56 @@ function addUrl() {
 }
 
 function createInputs(name, url) {
-    const div = document.createElement("div");
-    div.className = PARAMETER_CLASS;
+    const parameterDiv = document.createElement('div');
+    parameterDiv.className = PARAMETER_CLASS;
     
-    div.insertAdjacentHTML("beforeend",
-        "<div class='name_row'><label>Name: </label>"
-            + "<input class='" + NAME_CLASS + "' placeholder='example'/></div>"
-        + "<div class='url_row'><label>URL: </label>"
-            + "<input class='" + URL_CLASS + "' placeholder='http://example.com?p='/>[PARAMETER]"
-            + "<button class='delete'>X</button> </div");
-    const inputName = div.querySelector("input." + NAME_CLASS);
-    inputName.value = name || "";
+    const nameRowDiv = document.createElement('div');
+    nameRowDiv.className = 'name_row';
+    const nameLabel = document.createElement('label');
+    nameLabel.textContent = 'Name: ';
+    const nameInput = document.createElement('input');
+    nameInput.className = NAME_CLASS;
+    nameInput.placeholder = 'example';
+    nameRowDiv.appendChild(nameLabel);
+    nameRowDiv.appendChild(nameInput);
     
-    const inputUrl = div.querySelector("input." + URL_CLASS);
-    inputUrl.value = url || "";
+    const urlRowDiv = document.createElement('div');
+    urlRowDiv.className = 'url_row';
+    const urlLabel = document.createElement('label');
+    urlLabel.textContent = 'URL: ';
+    const urlInput = document.createElement('input');
+    urlInput.className = URL_CLASS;
+    urlInput.placeholder = 'http://example.com?p=';
+    const parameterText = document.createTextNode('[PARAMETER]');
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete';
+    deleteBtn.textContent = 'X';
+    urlRowDiv.appendChild(urlLabel);
+    urlRowDiv.appendChild(urlInput);
+    urlRowDiv.appendChild(parameterText);
+    urlRowDiv.appendChild(deleteBtn);
     
-    const deleteBtn = div.querySelector("button.delete");
-    deleteBtn.addEventListener( "click", ()=>{div.remove();} );
+    parameterDiv.appendChild(nameRowDiv);
+    parameterDiv.appendChild(urlRowDiv);    
+    
+    nameInput.value = name || "";
+    nameInput.addEventListener("keydown", inputListener, false);
+    urlInput.value = url || "";
+    urlInput.addEventListener("keydown", inputListener, false);
+    deleteBtn.addEventListener( "click", ()=>{parameterDiv.remove();} );
 
-    return div;
+    return parameterDiv;
+}
+
+function inputListener(e) {
+	if (e.keyCode == 13) {
+		saveOptions();
+	} else if (e.key == '/') {
+	    console.log(e);
+	    this.value = this.value + e.key;
+	    e.preventDefault();
+	}
+	
 }
 
 
@@ -83,31 +119,5 @@ document.addEventListener("DOMContentLoaded", restoreOptions);
 document.getElementById("save").addEventListener("click", saveOptions);
 document.getElementById("add").addEventListener("click", addUrl);
 
-var enter=13;
 
-function inputListener(e) {
-	if (e.keyCode === enter) {
-		saveOptions();
-	}
-}
 
-function listenInput(input) {
-	if (input.addEventListener) {
-		input.addEventListener("keydown", inputListener, false);
-	} else if (input.attachEvent) {
-		input.attachEvent("keydown", inputListener);
-	}
-}
-
-function listen() {
-	listenInput(document.getElementsByClassName(URL_CLASS));
-	listenInput(document.getElementsByClassName(NAME_CLASS));
-}
-
-if (window.addEventListener) {
-	window.addEventListener("load", listen, false);
-} else if (window.attachEvent) {
-	window.attachEvent("onload", listen);
-} else {
-	document.addEventListener("load", listen, false);
-}

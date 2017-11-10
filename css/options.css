@@ -24,3 +24,7 @@ label {
 button.delete {
     margin-left: 15px;
 }
+
+#error {
+  color: #db3b21;
+}
