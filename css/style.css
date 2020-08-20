@@ -21,6 +21,11 @@ body {
     flex-grow: 0;
 }
 
+button {
+	padding: 5px;
+	border: 0;
+}
+
 #error {
   color: #db3b21;
 }

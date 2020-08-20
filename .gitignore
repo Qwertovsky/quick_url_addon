@@ -1,3 +1,5 @@
 .web-extension-id
 screenshots
 web-ext-artifacts
+target
+quick_url_addon.pem

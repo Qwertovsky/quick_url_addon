@@ -14,11 +14,8 @@ function openWindow(url, parameter) {
     window.close();
 };
 
-function inputParameterListener(e) {
-	if (e.keyCode === 13) {
-		const url = e.target.getAttribute("data-url");
-	    let parameter = e.target.value;
-	    parameter = parameter.trim();
+function tryOpenWindow(url, parameter) {
+        parameter = parameter.trim();
 	
 	    if (parameter === "") {
 		    setErrorText("Please insert parameter");
@@ -27,6 +24,13 @@ function inputParameterListener(e) {
 	    } else {
 		    openWindow(url, parameter);
 	    }
+}
+
+function inputParameterListener(e) {
+	if (e.keyCode === 13) {
+		const url = e.target.getAttribute("data-url");
+	    const parameter = e.target.value;
+	    tryOpenWindow(url, parameter);
 	}
 };
 
@@ -60,9 +64,16 @@ function onLoad() {
             input.title = parameter[URL_FIELD];
             input.className = "url";
             input.addEventListener("keydown", inputParameterListener, false);
+
+            const btn = document.createElement("button");
+            btn.title = `Open ${parameter[NAME_FIELD]}`;
+            btn.innerHTML = "»";
+            btn.addEventListener("click", () => {tryOpenWindow(parameter[URL_FIELD], input.value.trim())}, false);
+            input.addEventListener("input", () => {btn.title = `Open ${parameter[NAME_FIELD]} ${input.value}`;}, false);
             
             div.appendChild(label);
             div.appendChild(input);
+            div.appendChild(btn);
             parametersEl.appendChild(div);
         }
     });
