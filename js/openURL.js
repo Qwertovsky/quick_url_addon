@@ -59,6 +59,7 @@ function onLoad() {
             parametersEl.appendChild(optionsBtn);
             return;
         }
+        let firstInput;
         for (let i = 0; i < parameters.length; i++) {
             const parameter = parameters[i];
             const div = document.createElement("div");
@@ -74,10 +75,14 @@ function onLoad() {
             input.title = parameter[URL_FIELD];
             input.className = "url";
             input.addEventListener("keydown", inputParameterListener, false);
+            if (!firstInput) {
+                firstInput = input;
+            }
 
             const btn = document.createElement("button");
             btn.title = `Open ${parameter[NAME_FIELD]}`;
             btn.innerHTML = "»";
+            btn.tabIndex = -1;
             btn.addEventListener("click", () => {tryOpenWindow(parameter[URL_FIELD], input.value.trim())}, false);
             input.addEventListener("input", () => {btn.title = `Open ${parameter[NAME_FIELD]} ${input.value}`;}, false);
             
@@ -86,6 +91,7 @@ function onLoad() {
             div.appendChild(btn);
             parametersEl.appendChild(div);
         }
+        firstInput.focus();
     });
 };
 
