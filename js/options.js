@@ -81,14 +81,12 @@ function createInputs(name, url) {
     urlLabel.textContent = 'URL: ';
     const urlInput = document.createElement('input');
     urlInput.className = URL_CLASS;
-    urlInput.placeholder = 'http://example.com?p=';
-    const parameterText = document.createTextNode('[PARAMETER]');
+    urlInput.placeholder = 'http://example.com/{?}/open?p={?}';
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'delete';
     deleteBtn.textContent = 'X';
     urlRowDiv.appendChild(urlLabel);
     urlRowDiv.appendChild(urlInput);
-    urlRowDiv.appendChild(parameterText);
     urlRowDiv.appendChild(deleteBtn);
     
     parameterDiv.appendChild(nameRowDiv);

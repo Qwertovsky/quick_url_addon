@@ -1,5 +1,7 @@
 const _browser = this.chrome;
 const storage = _browser.storage.sync;
+const PARAMS_DELIM = "/";
+const PLACEHOLDER = "{?}";
 
 function setErrorText(errorText) {
 	var divError=document.getElementById("error");
@@ -7,8 +9,16 @@ function setErrorText(errorText) {
 };
 
 function openWindow(url, parameter) {
+    if (url.indexOf(PLACEHOLDER) > 0) {
+        const params = parameter.split(PARAMS_DELIM);
+        for (param of params) {
+            url = url.replace(PLACEHOLDER, param);
+        }
+    } else {
+        url = url + parameter;
+    }
     _browser.tabs.create({
-            url: url + parameter
+            url
         }, (tab) => {}
     );
     window.close();
