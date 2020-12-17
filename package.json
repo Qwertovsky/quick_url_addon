@@ -1,0 +1,7 @@
+{
+  "name": "quick_url_addon",
+  "version": "0.12.0",
+  "webExt": {
+    "sourceDir": "src/"
+  }
+}
