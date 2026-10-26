@@ -11,7 +11,7 @@ web-ext build
 ```
 
 ```
-web-ext sign --api-key=... --api-secret=...
+web-ext sign --channel=listed --api-key=... --api-secret=...
 ```
 
 

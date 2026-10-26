@@ -1,7 +1,7 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Quick URL Opener",
-  "version": "0.12.0",
+  "version": "0.13.0",
 
   "description": "To quick open standard url where one parameter is changed",
   "homepage_url": "https://github.com/Qwertovsky/quick_url_addon",
@@ -12,21 +12,24 @@
 
   "permissions": [
    "storage"
- ],
+  ],
 
- "browser_action": {
-   "default_icon": "icons/icon.png",
-   "default_title": "Quick URL Opener",
-   "default_popup": "index.html"
- },
-
- "options_ui": {
-    "page": "options.html"
+  "action": {
+    "default_icon": "icons/icon.png",
+    "default_title": "Quick URL Opener",
+    "default_popup": "index.html"
   },
-  
- "applications": {
-    "gecko": {
-        "id": "quick-url-opener@qwertovsky.com"
-    }
- } 
+
+  "options_ui": {
+     "page": "options.html"
+   },
+   
+  "browser_specific_settings": {
+      "gecko": {
+          "id": "quick-url-opener@qwertovsky.com",
+          "data_collection_permissions": {
+            "required": ["none"]
+          }
+      }
+  } 
 }
